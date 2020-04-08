@@ -160,4 +160,4 @@ def main():  # for testing only. Will be removed in the final cipher file, as th
     #     print("{}: {}".format(string.printable.index(c),c))
 
 
-main()
+#main()
