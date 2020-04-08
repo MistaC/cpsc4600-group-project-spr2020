@@ -1,24 +1,41 @@
 from tkinter import *
 from encrypt import *
-keyFile = open("key.txt", "w")
-window = Tk()
-msg = Entry(window, width=30)
+
+mainWindow = Tk()
+msg = Entry(mainWindow)
 msg.pack()
+def encryptClick():
+		keyGenFile = open("key.txt", "w")
+		ciphertextWriteFile = open("codedmessage.txt", "w")
+		key = genKey()
+		inverseKey = Matrix(key).inv_mod(100)
+		inverseKey = np.array(inverseKey)
+		inverseKey = inverseKey.astype(int)
+		inverseKey.tofile(keyGenFile)
+		keyGenFile.close()
+		cipherText = encrypt(key,msg.get())
+		ciphertextWriteFile.write(cipherText)
+		ciphertextWriteFile.close()
+		complete = Label(mainWindow, text="Encryption complete")
+		complete.pack()
+		print(cipherText)
+def decryptClick():
+		readKey = open("key.txt", "r")
+		readMessage = open("codedmessage.txt", "r")
 
-def clickButton():
-	key = genKey()
-	ciphertext = encrypt(key,msg.get())
-	key.tofile(keyFile)
-	cipherLabel = Label(window, text=ciphertext)
-	cipherLabel.pack()
-button = Button(window, text="Click after message is entered", command=clickButton)
-button.pack()
+		decryptedText = decrypt(readKey.read(),readMessage.read())
+		complete = Label(mainWindow, text=decryptedText)
+		complete.pack()
+		readKey.close()
+		readMessage.close()
+encryptButton = Button(mainWindow,text="encrypt", command=encryptClick)
+decryptButton = Button(mainWindow,text="decrypt", command=decryptClick)
+encryptButton.pack()
+decryptButton.pack()
+mainWindow.mainloop()
 
-window.mainloop()
-keyFile.close()
-keyRead = open("key.txt", "r")
-print(np.fromfile(keyRead))
-keyRead.close()
+
+
 
 
 

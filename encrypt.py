@@ -156,6 +156,8 @@ def main():  # for testing only. Will be removed in the final cipher file, as th
 
     decrypted_text = decrypt(inverse_key, ciphertext)
     print("Decrypted text:\t\t{}\n-------------------".format(decrypted_text))
+
+    print(inverse_key)
     # for c in string.printable:
     #     print("{}: {}".format(string.printable.index(c),c))
 
