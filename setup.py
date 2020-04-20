@@ -4,7 +4,7 @@ base = None
 
 executables = [Executable("gui.py", base=base)]
 
-packages = ["idna","tkinter","encrypt","numpy"]
+packages = ["idna","tkinter","encrypt","numpy","time"]
 options = {
     'build_exe': {
         'packages':packages,

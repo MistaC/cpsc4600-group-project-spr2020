@@ -1,12 +1,14 @@
 from tkinter import *
 from encrypt import *
 import numpy as np
+import time
 
 mainWindow = Tk()
 # mainWindow.geometry("500x200")
 # msg = Entry(mainWindow)
 # msg.pack()
 def encryptClick():
+	start = time.time()
 	with open('message.txt') as f:
 		msg = f.read().strip()
 	keyGenFile = open("key.txt", "w")
@@ -23,11 +25,13 @@ def encryptClick():
 	cipherText = encrypt(key,msg)
 	ciphertextWriteFile.write(cipherText)
 	ciphertextWriteFile.close()
-	print("---------------\nEncryption complete! Ciphertext below.\n\n{}\n---------------".format(cipherText))
+	end = time.time()
+	print("---------------\nEncryption complete! Ciphertext below.\n\n{}\n---------------\nTotal execution time: {} seconds".format(cipherText,end-start))
 	# complete = Label(mainWindow, text="Encryption complete")
 	# complete.pack()
 	# print(cipherText)
 def decryptClick():
+	start = time.time()
 	readKey = open("key.txt", "r")
 	readMessage = open("codedmessage.txt", "r")
 
@@ -43,7 +47,8 @@ def decryptClick():
 	final_key = np.asarray(dec_key)
 	# print(final_key)
 	decryptedText = decrypt(final_key,readMessage.read())
-	print("---------------\nDecryption complete! Plaintext below.\n\n{}\n---------------".format(decryptedText))
+	end = time.time()
+	print("---------------\nDecryption complete! Plaintext below.\n\n{}\n---------------\nTotal execution time: {} seconds".format(decryptedText,end-start))
 	output = open("decrypted_message.txt","w")
 	output.write(decryptedText)
 	output.close()
