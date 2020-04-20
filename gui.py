@@ -4,24 +4,16 @@ import numpy as np
 import time
 
 mainWindow = Tk()
-# mainWindow.geometry("500x200")
-# msg = Entry(mainWindow)
-# msg.pack()
 def encryptClick():
 	start = time.time()
 	with open('message.txt') as f:
 		msg = f.read().strip()
-	keyGenFile = open("key.txt", "w")
 	ciphertextWriteFile = open("codedmessage.txt", "w")
 	key = genKey()
 	inverseKey = Matrix(key).inv_mod(100)
 	inverseKey = np.array(inverseKey)
 	inverseKey = inverseKey.astype(int)
-	# inverseKey.tofile(keyGenFile) #Issue occurs here
-	for i in range(3):
-		for j in range(3):
-			keyGenFile.write("{}:".format(inverseKey[i][j]))
-	keyGenFile.close()
+	np.save("key",inverseKey)
 	cipherText = encrypt(key,msg)
 	ciphertextWriteFile.write(cipherText)
 	ciphertextWriteFile.close()
@@ -32,29 +24,26 @@ def encryptClick():
 	# print(cipherText)
 def decryptClick():
 	start = time.time()
-	readKey = open("key.txt", "r")
+	inv_key = np.load("key.npy")
 	readMessage = open("codedmessage.txt", "r")
 
-	inv_key = readKey.read().split(":")
-	inv_key = [x for x in inv_key if x != ":"]
-	inv_key = [x for x in inv_key if x != ""]
-	dec_key = [[0 for j in range(3)] for i in range(3)]
-	iter = 0
-	for i in range(3):
-		for j in range(3):
-			dec_key[i][j] = int(inv_key[iter])
-			iter += 1
-	final_key = np.asarray(dec_key)
+	# inv_key = readKey.read().split(":")
+	# inv_key = [x for x in inv_key if x != ":"]
+	# inv_key = [x for x in inv_key if x != ""]
+	# dec_key = [[0 for j in range(3)] for i in range(3)]
+	# iter = 0
+	# for i in range(3):
+	# 	for j in range(3):
+	# 		dec_key[i][j] = int(inv_key[iter])
+	# 		iter += 1
+	# final_key = np.asarray(dec_key)
 	# print(final_key)
-	decryptedText = decrypt(final_key,readMessage.read())
+	decryptedText = decrypt(inv_key,readMessage.read())
 	end = time.time()
 	print("---------------\nDecryption complete! Plaintext below.\n\n{}\n---------------\nTotal execution time: {} seconds".format(decryptedText,end-start))
 	output = open("decrypted_message.txt","w")
 	output.write(decryptedText)
 	output.close()
-	# complete = Label(mainWindow, text=decryptedText)
-	# complete.pack()
-	readKey.close()
 	readMessage.close()
 encryptButton = Button(mainWindow,text="encrypt", command=encryptClick)
 decryptButton = Button(mainWindow,text="decrypt", command=decryptClick)
