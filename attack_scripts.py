@@ -1,5 +1,6 @@
-# TODO: add in decryption method in for statement
+# TODO: make altered cipher file to generate a ciphertext that can be used here with only lowercase letters.
 import string
+import time
 from itertools import combinations_with_replacement
 import numpy as np
 saveKeyHere = np.empty((3,3), dtype=int)
@@ -7,11 +8,26 @@ def bruteForceKeyGeneration():
     count = 0
     test = np.array([[0,0,0],[0,0,0],[0,0,1]])
     x = np.empty((3,3), dtype=int)
-    for comb in combinations_with_replacement(range(27),9):
+    known_plain = "Attack at dawn"
+    # for c in string.printable:
+    #     print("{}: {}".format(string.printable.index(c),c))
+    start = time.time()
+    for comb in combinations_with_replacement(range(100),9):
         x.flat[:] = comb
         count = count +1
-        #print x
-        decrypt(x, "what will happen")
+        # if count % 50000 == 0:
+        #     end = time.time()
+        #     print(end-start)
+        #     # print(x)
+        #     break
+        # if count > 150:
+        #     break
+        d_msg = decrypt(x,"%><Qy'@<Rb#+BKE")
+        if d_msg == known_plain:
+            saveKeyHere = x
+            break
+    print("\n\nTotal number of keys checked: {}\n\nYour plaintext is: {}\n\nYour decrypted message is: {}".format(count,known_plain,d_msg))
+    print(x)
     return saveKeyHere
 def charIndex(char):
     return string.printable.index(char)
@@ -65,9 +81,12 @@ def decrypt(key,msg):
             decrypted_text += indexChar(mult[2][0])
         else:
             print("Something went wrong in the decryption function.")
-    print decrypted_text
+    # print(decrypted_text)
     return decrypted_text
+start2 = time.time()
 bruteForceKeyGeneration()
+end2 = time.time()
+print("Total execution time: {} seconds".format(end2-start2))
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -384,7 +403,7 @@ def breakString(ciphertext, fistChar, secChar):
         secChar = secChar + 1
     print(plaintext[:len(ciphertext)])
     realPlaintext = plaintext[:len(ciphertext)]
-    print bigSum
+    print(bigSum)
     saveBigSum = bigSum
 
 
