@@ -14,13 +14,18 @@ def bruteForceKeyGeneration():
         x = np.zeros((3,3), dtype=int)
         x.flat[:] = comb
         count += 1
-
-
-        d_msg = decrypt(x,"kzaepgqvcsri")
-        if d_msg == "catsaregreat":
-            saveKeyHere = x
-            break
-        else:
+        try:
+            y = Matrix(x).inv_mod(26) #ORIGINAL: 100
+            y = np.array(y)
+            y = x.astype(int)
+            d_msg = decrypt(x,"kzaepgqvcsri")
+            if d_msg == "catsaregreat":
+                saveKeyHere = x
+                break
+            else:
+                continue
+        except ValueError:
+            print("Key is not invertible. Trying another...")
             continue
     # d_msg = decrypt(test,"kzaepgqvcsri")
     print("\n\nTotal number of keys checked: {}\n\nYour plaintext is: catsaregreat\n\nYour decrypted message is: {}".format(count,d_msg))
