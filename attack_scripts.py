@@ -11,12 +11,13 @@ def bruteForceKeyGeneration():
     x = np.zeros((3,3), dtype=int)
     d_msg = ""
     saveKeyHere = np.zeros((3,3), dtype=int)
-    for comb in combinations_with_replacement(range(26),9):
+    for comb in combinations_with_replacement(range(10),9):
         x = np.zeros((3,3), dtype=int)
         x.flat[:] = comb
+        print(x)
         count += 1
-        d_msg = decrypt(x,"kzaepgqvcsri")
-        if d_msg == "catsaregreat":
+        d_msg = decrypt(x,"087162981")
+        if d_msg == "7584123":
             saveKeyHere = x
             break
     # d_msg = decrypt(test,"kzaepgqvcsri")
@@ -25,9 +26,9 @@ def bruteForceKeyGeneration():
     return saveKeyHere
 
 def charIndex(char):
-    return string.ascii_lowercase.index(char)
+    return string.digits.index(char)
 def indexChar(index):
-    return string.ascii_lowercase[index]
+    return string.digits[index]
 
 
 def decrypt(key,msg):
@@ -39,9 +40,9 @@ def decrypt(key,msg):
         # print("Current symbol: ",c)
         if iter > 2:
             mult = np.matmul(key,temp)
-            mult[0][0] = mult[0][0] % 26
-            mult[1][0] = mult[1][0] % 26
-            mult[2][0] = mult[2][0] % 26
+            mult[0][0] = mult[0][0] % 10 #ORIGINAL: 100
+            mult[1][0] = mult[1][0] % 10 #ORIGINAL: 100
+            mult[2][0] = mult[2][0] % 10 #ORIGINAL: 100
             # print("0,0: {}\n1,0: {}\n2,0: {}\nData types: {}, {}, {}".format(mult[0][0],mult[1][0],mult[2][0],type(mult[0][0]),type(mult[1][0]),type(mult[2][0])))
             decrypted_text += indexChar(mult[0][0])
             decrypted_text += indexChar(mult[1][0])
@@ -56,27 +57,26 @@ def decrypt(key,msg):
             # print("Before mult: {}".format(temp[0][0]))
             mult = np.matmul(key,temp)
             # print("After mult & before mod: {}".format(mult[0][0]))
-            mult[0][0] = mult[0][0] % 26
+            mult[0][0] = mult[0][0] % 10 #ORIGINAL: 100
             # print("After mult & mod: {}".format(mult[0][0]))
             decrypted_text += indexChar(mult[0][0])
         elif iter == 2:
             #two values in temp
             mult = np.matmul(key,temp)
-            mult[0][0] = mult[0][0] % 26
-            mult[1][0] = mult[1][0] % 26
+            mult[0][0] = mult[0][0] % 10 #ORIGINAL: 100
+            mult[1][0] = mult[1][0] % 10 #ORIGINAL: 100
             decrypted_text += indexChar(mult[0][0])
             decrypted_text += indexChar(mult[1][0])
         elif iter == 3:
             mult = np.matmul(key,temp)
-            mult[0][0] = mult[0][0] % 26
-            mult[1][0] = mult[1][0] % 26
-            mult[2][0] = mult[2][0] % 26
+            mult[0][0] = mult[0][0] % 10 #ORIGINAL: 100
+            mult[1][0] = mult[1][0] % 10 #ORIGINAL: 100
+            mult[2][0] = mult[2][0] % 10 #ORIGINAL: 100
             decrypted_text += indexChar(mult[0][0])
             decrypted_text += indexChar(mult[1][0])
             decrypted_text += indexChar(mult[2][0])
         else:
             print("Something went wrong in the decryption function.")
-    # print(decrypted_text)
     return decrypted_text
 start2 = time.time()
 bruteForceKeyGeneration()
