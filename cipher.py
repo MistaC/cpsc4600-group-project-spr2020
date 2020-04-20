@@ -145,7 +145,7 @@ def main(): #for testing only. Will be removed in the final cipher file, as the 
     inverse_key = Matrix(key).inv_mod(26) #ORIGINAL: 100
     inverse_key = np.array(inverse_key)
     inverse_key = inverse_key.astype(int)
-    # print("The better inverse:\n",inverse_key)
+    print("Original:\n{}\nInverse:\n{}".format(key,inverse_key))
 
     print("-------------------\nPlaintext length:\t{}\n".format(len(msg)))
     print("The plaintext is:\t{}\n".format(msg))
