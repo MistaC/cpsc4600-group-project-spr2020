@@ -8,9 +8,9 @@ import secrets
 #Date:          April 2020
 
 def charIndex(char):
-    return string.digits.index(char) #ORIGINAL: string.printable
+    return string.printable.index(char) #ORIGINAL: string.printable
 def indexChar(index):
-    return string.digits[index] #ORIGINAL: string.printable
+    return string.printable[index] #ORIGINAL: string.printable
 
 
 #Returns cryptographically secure 3x3 square list of the cipher key. May not work on all systems.
@@ -20,8 +20,8 @@ def genKey():
         try:
             for row in range(3):
                 for col in range(3):
-                    key_matrix[row][col] = 0+secrets.randbelow(10) #ORIGINAL: 100
-            inverse_key = Matrix(key_matrix).inv_mod(10) #ORIGINAL: 100
+                    key_matrix[row][col] = 0+secrets.randbelow(100) #ORIGINAL: 100
+            inverse_key = Matrix(key_matrix).inv_mod(100) #ORIGINAL: 100
             inverse_key = np.array(inverse_key)
             inverse_key = inverse_key.astype(int)
             break
@@ -38,9 +38,9 @@ def encrypt(key,msg): #key is key matrix. msg is plaintext string.
     for c in msg: #Loop three times. Get a character ascii value each time. Do matrix mult at 3. Convert resulting values into letters and concat with text variable.
         if iter > 2: #3 ascii values already in temp
             mult = np.matmul(key,temp) #3x3 * 3x1 = 3x1
-            mult[0][0] = mult[0][0] % 10 #ORIGINAL: 100
-            mult[1][0] = mult[1][0] % 10 #ORIGINAL: 100
-            mult[2][0] = mult[2][0] % 10 #ORIGINAL: 100
+            mult[0][0] = mult[0][0] % 100 #ORIGINAL: 100
+            mult[1][0] = mult[1][0] % 100 #ORIGINAL: 100
+            mult[2][0] = mult[2][0] % 100 #ORIGINAL: 100
             encrypted_text += indexChar(mult[0][0])
             encrypted_text += indexChar(mult[1][0])
             encrypted_text += indexChar(mult[2][0])
@@ -53,30 +53,30 @@ def encrypt(key,msg): #key is key matrix. msg is plaintext string.
     if iter > 0: #Exited loop with partially or fully filled block of three values. Do padding where necessary with space character.
         if iter == 1:
             #single value in temp
-            temp[1][0] = charIndex("0") #ORIGINAL: " "
-            temp[2][0] = charIndex("0") #ORIGINAL: " "
+            temp[1][0] = charIndex(" ") #ORIGINAL: " "
+            temp[2][0] = charIndex(" ") #ORIGINAL: " "
             mult = np.matmul(key,temp) #3x3 * 3x1 = 3x1
-            mult[0][0] = mult[0][0] % 10 #ORIGINAL: 100
-            mult[1][0] = mult[1][0] % 10 #ORIGINAL: 100
-            mult[2][0] = mult[2][0] % 10 #ORIGINAL: 100
+            mult[0][0] = mult[0][0] % 100 #ORIGINAL: 100
+            mult[1][0] = mult[1][0] % 100 #ORIGINAL: 100
+            mult[2][0] = mult[2][0] % 100 #ORIGINAL: 100
             encrypted_text += indexChar(mult[0][0])
             encrypted_text += indexChar(mult[1][0])
             encrypted_text += indexChar(mult[2][0])
         elif iter == 2:
             #two values in temp
-            temp[2][0] = charIndex("0") #ORIGINAL: " "
+            temp[2][0] = charIndex(" ") #ORIGINAL: " "
             mult = np.matmul(key,temp) #3x3 * 3x1 = 3x1
-            mult[0][0] = mult[0][0] % 10 #ORIGINAL: 100
-            mult[1][0] = mult[1][0] % 10 #ORIGINAL: 100
-            mult[2][0] = mult[2][0] % 10 #ORIGINAL: 100
+            mult[0][0] = mult[0][0] % 100 #ORIGINAL: 100
+            mult[1][0] = mult[1][0] % 100 #ORIGINAL: 100
+            mult[2][0] = mult[2][0] % 100 #ORIGINAL: 100
             encrypted_text += indexChar(mult[0][0])
             encrypted_text += indexChar(mult[1][0])
             encrypted_text += indexChar(mult[2][0])
         elif iter == 3:
             mult = np.matmul(key,temp) #3x3 * 3x1 = 3x1
-            mult[0][0] = mult[0][0] % 10 #ORIGINAL: 100
-            mult[1][0] = mult[1][0] % 10 #ORIGINAL: 100
-            mult[2][0] = mult[2][0] % 10 #ORIGINAL: 100
+            mult[0][0] = mult[0][0] % 100 #ORIGINAL: 100
+            mult[1][0] = mult[1][0] % 100 #ORIGINAL: 100
+            mult[2][0] = mult[2][0] % 100 #ORIGINAL: 100
             encrypted_text += indexChar(mult[0][0])
             encrypted_text += indexChar(mult[1][0])
             encrypted_text += indexChar(mult[2][0])
@@ -95,9 +95,9 @@ def decrypt(key,msg):
         # print("Current symbol: ",c)
         if iter > 2:
             mult = np.matmul(key,temp)
-            mult[0][0] = mult[0][0] % 10 #ORIGINAL: 100
-            mult[1][0] = mult[1][0] % 10 #ORIGINAL: 100
-            mult[2][0] = mult[2][0] % 10 #ORIGINAL: 100
+            mult[0][0] = mult[0][0] % 100 #ORIGINAL: 100
+            mult[1][0] = mult[1][0] % 100 #ORIGINAL: 100
+            mult[2][0] = mult[2][0] % 100 #ORIGINAL: 100
             # print("0,0: {}\n1,0: {}\n2,0: {}\nData types: {}, {}, {}".format(mult[0][0],mult[1][0],mult[2][0],type(mult[0][0]),type(mult[1][0]),type(mult[2][0])))
             decrypted_text += indexChar(mult[0][0])
             decrypted_text += indexChar(mult[1][0])
@@ -112,21 +112,21 @@ def decrypt(key,msg):
             # print("Before mult: {}".format(temp[0][0]))
             mult = np.matmul(key,temp)
             # print("After mult & before mod: {}".format(mult[0][0]))
-            mult[0][0] = mult[0][0] % 10 #ORIGINAL: 100
+            mult[0][0] = mult[0][0] % 100 #ORIGINAL: 100
             # print("After mult & mod: {}".format(mult[0][0]))
             decrypted_text += indexChar(mult[0][0])
         elif iter == 2:
             #two values in temp
             mult = np.matmul(key,temp)
-            mult[0][0] = mult[0][0] % 10 #ORIGINAL: 100
-            mult[1][0] = mult[1][0] % 10 #ORIGINAL: 100
+            mult[0][0] = mult[0][0] % 100 #ORIGINAL: 100
+            mult[1][0] = mult[1][0] % 100 #ORIGINAL: 100
             decrypted_text += indexChar(mult[0][0])
             decrypted_text += indexChar(mult[1][0])
         elif iter == 3:
             mult = np.matmul(key,temp)
-            mult[0][0] = mult[0][0] % 10 #ORIGINAL: 100
-            mult[1][0] = mult[1][0] % 10 #ORIGINAL: 100
-            mult[2][0] = mult[2][0] % 10 #ORIGINAL: 100
+            mult[0][0] = mult[0][0] % 100 #ORIGINAL: 100
+            mult[1][0] = mult[1][0] % 100 #ORIGINAL: 100
+            mult[2][0] = mult[2][0] % 100 #ORIGINAL: 100
             decrypted_text += indexChar(mult[0][0])
             decrypted_text += indexChar(mult[1][0])
             decrypted_text += indexChar(mult[2][0])
@@ -142,7 +142,7 @@ def main(): #for testing only. Will be removed in the final cipher file, as the 
     key = genKey()
     # print("Original key matrix:\n",key)
     # print("Bad inverse with numpy:\n",np.linalg.inv(key))
-    inverse_key = Matrix(key).inv_mod(10) #ORIGINAL: 100
+    inverse_key = Matrix(key).inv_mod(100) #ORIGINAL: 100
     inverse_key = np.array(inverse_key)
     inverse_key = inverse_key.astype(int)
     print("Original:\n{}\nInverse:\n{}".format(key,inverse_key))
