@@ -6,31 +6,27 @@ import numpy as np
 saveKeyHere = np.empty((3,3), dtype=int)
 def bruteForceKeyGeneration():
     count = 0
-    test = np.array([[0,0,0],[0,0,0],[0,0,1]])
-    x = np.empty((3,3), dtype=int)
-    known_plain = "catsaregreat"
-    # for c in string.printable:
-    #     print("{}: {}".format(string.printable.index(c),c))
-    start = time.time()
+    # test = np.array([[3,2,22],[24,6,21],[22,19,23]])
+    x = np.zeros((3,3), dtype=int)
+    d_msg = ""
+    saveKeyHere = np.zeros((3,3), dtype=int)
     for comb in combinations_with_replacement(range(26),9):
+        x = np.zeros((3,3), dtype=int)
         x.flat[:] = comb
-        count = count +1
-        if count % 50000 == 0:
-            print(x)
-        # if count % 50000 == 0:
-        #     end = time.time()
-        #     print(end-start)
-        #     # print(x)
-        #     break
-        # if count > 150:
-        #     break
-        d_msg = decrypt(x,"ngrtazfovvsp")
-        if d_msg == known_plain:
+        count += 1
+
+
+        d_msg = decrypt(x,"kzaepgqvcsri")
+        if d_msg == "catsaregreat":
             saveKeyHere = x
             break
-    print("\n\nTotal number of keys checked: {}\n\nYour plaintext is: {}\n\nYour decrypted message is: {}".format(count,known_plain,d_msg))
-    print(x)
+        else:
+            continue
+    # d_msg = decrypt(test,"kzaepgqvcsri")
+    print("\n\nTotal number of keys checked: {}\n\nYour plaintext is: catsaregreat\n\nYour decrypted message is: {}".format(count,d_msg))
+    print(saveKeyHere)
     return saveKeyHere
+
 def charIndex(char):
     return string.ascii_lowercase.index(char)
 def indexChar(index):
